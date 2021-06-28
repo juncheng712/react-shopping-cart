@@ -15,7 +15,7 @@ function filter({count, sort, sortProducts, size, filterProducts}) {
                 </select>
             </div>
             <div className="filter-size">
-                Filter 
+                Filter  {" "}
                 <select value={size} onChange={filterProducts}>
                     <option value="">All</option>
                     <option value="XS">XS</option>
