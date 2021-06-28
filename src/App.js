@@ -14,7 +14,7 @@ function App() {
     console.log(e.target.value)
     setSort(e.target.value);
     setProducts(
-      products.slice().sort((a, b) => 
+      data.products.slice().sort((a, b) => 
       sort === "lowest"
       ?    // if
       ( a.price < b.price ? 1 : -1 )
