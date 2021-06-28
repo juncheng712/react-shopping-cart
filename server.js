@@ -7,8 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 
 
-url = "mongodb+srv://juncheng:Juncheng1314@mflix.r4htl.mongodb.net/shopping_cart?retryWrites=true&w=majority"
-mongoose.connect(url, {
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
