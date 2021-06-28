@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cart from "./components/Cart";
 import Filter from "./components/Filter"
 import Products from "./components/Products";
 import data from "./data.json";
@@ -9,6 +10,7 @@ function App() {
   const [products, setProducts] = useState(data.products)
   const [size, setSize] = useState("");
   const [sort, setSort] = useState("");
+  const [cartItems, setCartItems] = useState([]);
 
   const sortProducts = (e) => {
     console.log(e.target.value)
@@ -38,6 +40,29 @@ function App() {
       setProducts(data.products.filter(product => product.availableSizes.indexOf(e.target.value)>=0))
     }
   }
+
+  const addToCart = product => {
+    const cartItemsSlice = cartItems.slice();
+    let alreadyInCart = false;
+    // if the item is already in cart, just increment
+    cartItemsSlice.forEach(item => {
+      if (item._id === product._id) {
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+    // if the item is not in cart, just add it in
+    if (!alreadyInCart) {
+      cartItemsSlice.push({...product, count: 1})
+    }
+    setCartItems(cartItemsSlice)
+  }
+
+  const removeFromCart = product => {
+    const cartItemsSlice = cartItems.slice(); 
+    setCartItems(cartItemsSlice.filter(x => x._id !== product._id)); // ONly returns item that is not selected "remove" by user
+    console.log(cartItems)
+  }
   
   return (
     <div className="grid-container">
@@ -55,10 +80,13 @@ function App() {
             filterProducts={filterProducts}
             sortProducts={sortProducts}
              />
-            <Products products={products} />
+            <Products products={products} addToCart={addToCart} />
           </div>
           <div className="sidebar">
-              Cart Items
+              <Cart 
+              cartItems={cartItems} 
+              removeFromCart={removeFromCart}
+              />
           </div>
         </div>
       </main>
