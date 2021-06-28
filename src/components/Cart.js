@@ -1,7 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import formatCurrency from '../util'
 
-function Cart({cartItems, removeFromCart}) {
+function Cart({cartItems, removeFromCart, processOrder}) {
+
+    const [checkout, setCheckout] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+
+    const createOrder = e => {
+        e.preventDefault();
+        const order = {
+            name,
+            email,
+            address,
+            cartItems
+        };
+        processOrder(order)
+    }
 
     return (
         <div>
@@ -35,6 +51,7 @@ function Cart({cartItems, removeFromCart}) {
             </div>
             {
                 cartItems.length!==0 && (
+                    <div>
                     <div className='cart'>
                         <div className="total">
                             <div className="">
@@ -42,8 +59,39 @@ function Cart({cartItems, removeFromCart}) {
                                 {formatCurrency(cartItems.reduce((a, c) => a + (c.price*c.count), 0))}
                                 {/* a for accumulator, c for cartItems, 0 for initial value */}
                             </div>
-                            <button className="button primary">Proceed</button>
+                            <button className="button primary" onClick={() => setCheckout(true)} >Proceed</button>
                         </div>
+                    </div>
+                    {
+                        checkout
+                        &&
+                        (
+                            <div className="cart">
+                                <form onSubmit={createOrder}>
+                                    <ul className="form-container">
+                                        <li>
+                                            <label htmlFor="email">Email</label>
+                                                <input name="email" type="email" value={email}
+                                                required onChange={(e) => setEmail(e.target.value)} />
+                                        </li>
+                                        <li>
+                                            <label htmlFor="name">Name</label>
+                                                <input name="name" type="text" required  value={name}
+                                                onChange={(e) => setName(e.target.value)} />
+                                        </li>
+                                        <li>
+                                            <label htmlFor="address">Address</label>
+                                                <input name="address" type="text" required  value={address}
+                                                onChange={(e) => setAddress(e.target.value)} />
+                                        </li>
+                                        <li>
+                                            <button type="submit" className="button primary">Checkout</button>
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                        )
+                    }
                     </div>
                 )
             }

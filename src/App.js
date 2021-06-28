@@ -7,11 +7,21 @@ import data from "./data.json";
 
 function App() {
 
+  // component state
   const [products, setProducts] = useState(data.products)
   const [size, setSize] = useState("");
   const [sort, setSort] = useState("");
-  const [cartItems, setCartItems] = useState([]);
 
+  const savedCartItems = 
+    localStorage.getItem("cartItems")
+    ?
+    JSON.parse(localStorage.getItem("cartItems"))
+    :
+    []
+  // if user stores items in cart before, load item from local storage, otherwise return empty array
+  const [cartItems, setCartItems] = useState(savedCartItems);
+
+  // component function
   const sortProducts = (e) => {
     console.log(e.target.value)
     setSort(e.target.value);
@@ -55,15 +65,20 @@ function App() {
     if (!alreadyInCart) {
       cartItemsSlice.push({...product, count: 1})
     }
-    setCartItems(cartItemsSlice)
+    setCartItems(cartItemsSlice);
+    localStorage.setItem("cartItems", JSON.stringify(cartItemsSlice))
   }
 
   const removeFromCart = product => {
     const cartItemsSlice = cartItems.slice(); 
     setCartItems(cartItemsSlice.filter(x => x._id !== product._id)); // ONly returns item that is not selected "remove" by user
-    console.log(cartItems)
+    localStorage.setItem("cartItems", JSON.stringify(cartItemsSlice.filter(x => x._id !== product._id)))
   }
   
+  const processOrder = order => {
+    alert("Need to save order for " + order.name)
+  }
+
   return (
     <div className="grid-container">
       <header>
@@ -84,6 +99,7 @@ function App() {
           </div>
           <div className="sidebar">
               <Cart 
+              processOrder={processOrder}
               cartItems={cartItems} 
               removeFromCart={removeFromCart}
               />
