@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import formatCurrency from '../util';
 import Fade from "react-reveal/Fade";
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { cartActionCreators } from '../state';
 
-function Cart({cartItems, removeFromCart, processOrder}) {
+function Cart() {
 
     const [checkout, setCheckout] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
+
+    const dispatch = useDispatch();
+    const { addToCart } = bindActionCreators(cartActionCreators, dispatch);
+    const { removeFromCart } = bindActionCreators(cartActionCreators, dispatch);
+
+
+    const cartItems = useSelector((state) => state.cart.cartItems);
+
 
     const createOrder = e => {
         e.preventDefault();
@@ -17,7 +28,8 @@ function Cart({cartItems, removeFromCart, processOrder}) {
             address,
             cartItems
         };
-        processOrder(order)
+        // addToCart(order)
+        console.log(order)
     }
 
     return (

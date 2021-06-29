@@ -5,16 +5,18 @@ import Zoom from "react-reveal/Zoom";
 import Modal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../state';
+import { actionCreators, cartActionCreators } from '../state';
 
 
 // import { connect } from 'react-redux';
 // import { fetchProducts } from './actions/productActions';
 
-function Products({addToCart}) {
+function Products() {
 
     const dispatch = useDispatch();
     const { fetchProducts } = bindActionCreators(actionCreators, dispatch);
+    const { addToCart } = bindActionCreators(cartActionCreators, dispatch);
+
 
 
     const allProducts = useSelector((state) => state.products.items);
