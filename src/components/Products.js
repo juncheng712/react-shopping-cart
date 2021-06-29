@@ -11,13 +11,14 @@ import { actionCreators } from '../state';
 // import { connect } from 'react-redux';
 // import { fetchProducts } from './actions/productActions';
 
-function Products({products, addToCart}) {
+function Products({addToCart}) {
 
     const dispatch = useDispatch();
     const { fetchProducts } = bindActionCreators(actionCreators, dispatch);
 
 
-    const items = useSelector((state) => state.products.items);
+    const allProducts = useSelector((state) => state.products.items);
+    const filteredProducts = useSelector((state) => state.products.filteredItems);
 
     useEffect(() => {
         fetchProducts()
@@ -42,13 +43,13 @@ function Products({products, addToCart}) {
         <div> 
             <Fade bottom cascade={true}>
                 {
-                    !products 
+                    !filteredProducts 
                     ?  
                     <div>Loading...</div> 
                     :
                     (<ul className="products">
                         {
-                        products.map(product => (
+                        filteredProducts.map(product => (
                             <li key={product._id}>
                                 <div className="product">
                                     <a href={"#" + product._id} onClick={() => openModal(product)}>
@@ -87,7 +88,8 @@ function Products({products, addToCart}) {
                                     Available Sizes: {" "}
                                     {product.availableSizes.map( size => (
                                         <span>{" "}<button className="button">{size}</button></span>
-                                    ))}
+                                    ))
+                                    } 
                                 </p>
                                 <div className="product-price">
                                     <div className="">
